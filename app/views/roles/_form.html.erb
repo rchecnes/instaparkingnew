@@ -1,0 +1,12 @@
+<%= simple_form_for @role, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :name %>
+  <%= error_span(@role[:name]) %>
+  <%= f.input :description %>
+  <%= error_span(@role[:description]) %>
+  <%= f.input :flag %>
+  <%= error_span(@role[:flag]) %>
+
+  <%= f.button :submit, :class => 'btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                roles_path, :class => 'btn btn-default' %>
+<% end %>

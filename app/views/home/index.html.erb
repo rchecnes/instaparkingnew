@@ -1,0 +1,246 @@
+
+<div class="row">
+  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+    <div class="panel panel-info">
+      <div class="panel-heading"><h3>Buscar Estacionamiento</h3></div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group">
+              <label class="string optional control-label">Dirección</label>
+              <input class="string optional form-control" type="text" name="address" id="address">
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+              <label class="string optional control-label">Fecha Desde</label>
+              <input class="string optional form-control" type="text" name="started_at" id="started_at" data-provide='datepicker'>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+              <label class="string optional control-label">Fecha Hasta</label>
+              <input class="string optional form-control" type="text" name="ended_at" id="ended_at" data-provide='datepicker'>
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group">
+              <label class="control-label">Distrito</label>
+              <select class="form-control" type="text" name="district" id="district">
+                <option value="">Seleccionar</option>
+                <% @districts.each do |district| %>
+                  <option value="<%=district.id %>"><%=district.name %></option>
+                <% end %>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 pull-right">
+            <button type="button" class="btn btn-lg btn-success" id="buscar_park">Buscar</button>
+            <button type="button" class="btn btn-lg btn-default" id="limpiar_park">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+            <h3 id="title_resumen">Estacionamientos Disponibles</h3>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+            <%= image_tag('loading.gif', :class => "", :width =>'70', :height => '70', :id=>'img_loading', :style=>'display:none') %>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body" id="list_places">
+        
+        
+         <% if @count_place > 0%>
+          <% @places.each do |place| %>
+            
+            <div class="group-col">
+              <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                  <div><b>Dirección:</b> <%=place.address %></div>
+                  <div><b>Distrito:</b> <%= place.district.name %></div>
+                  <div><b>Precio:</b> <b class="precio">S/. <%=place.price %></b> Por hora</div>
+                  <form class="simple_form form-horizontal" novalidate="novalidate" id="new_place" action="/reserve/new" accept-charset="UTF-8" method="get">
+                    <a onclick="detail(<%=place.id%>)" class="btn btn-sm btn-info" role="button">Más Detalles</a>&nbsp;
+                    <button type="submit" class="btn btn-sm btn-success">Reservar</button>
+                    <input type="hidden" name="place_id" id="place_id" value="<%=place.id%>">
+                  </form>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                  <%= image_tag place.url_image, :class => "img img-responsive img_parking", :width=>"150", :height=>"150" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class='error'>No hay resultado para su busqueda</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  $(document).ready(function(){
+    $('#started_at').datepicker({
+      autoclose: true,
+      calendarWeeks: true,
+      format: 'yyyy-mm-dd'
+    });
+    $('#ended_at').datepicker({
+      autoclose: true,
+      calendarWeeks: true,
+      format: 'yyyy-mm-dd'
+    });
+    
+    $('#started_time').timepicker();
+    $('#ended_time').timepicker();
+    
+    //boton reservar
+  
+    printHtml = function(data){
+           var html='';
+          
+           if(data.length>0){
+               for (var i = 0; i < data.length; i++) {
+                 
+                  html += '<div class="group-col">';
+                    html += '<div class="row">';
+                      html += '<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">';
+                        html += '<div><b>Dirección: </b>'+data[i].address+'</div>';
+                        html += '<div><b>Distrito: </b>'+data[i].district.name+'</div>';
+                        html += '<div><b>Precio: </b> <b class="precio">S/. '+data[i].price+'</b> Por hora</div>';
+                        html += '<br>';
+                        
+                        html += '<form class="simple_form form-horizontal" novalidate="novalidate" id="new_place" action="reserve/new" accept-charset="UTF-8" method="get">';
+                          html += '<a onclick="detail('+data[i].id+')" class="btn btn-sm btn-info" role="button">Más Detalles</a>&nbsp;';
+                          html += '<button type="submit" class="btn btn-sm btn-success">Reservar</button>';
+                          html += '<input type="hidden" name="place_id" id="place_id" value="'+data[i].id+'">';
+                        html += '</form>';
+                      
+                      html += '</div>';
+                      
+                      html += '<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">';
+                        html += '<img src="images/'+data[i].url_image+'" class="img img-responsive img_parking" width="150" height="150">';
+                      html += '</div>';
+                    html += '</div>';
+                  html += '</div>';
+               }
+           }else{
+               html += "<p class='error'>No hay resultado para su busqueda</p>"
+           }
+           
+           $("#list_places").html(html);
+       }
+       
+      
+      
+        
+      buscarParking = function(){
+          var data = {
+               address: $("#address").val(),
+               started_at: $("#started_at").val(),
+               ended_at: $("#ended_at").val(),
+               district: $("#district").val()
+           }
+           
+           $("#title_resumen").html("Estacionamientos Disponibles");
+           $("#img_loading").show();
+           
+           $.ajax({
+              type:"GET",
+              url:"home/listplace",
+              data: data,
+              dataType:"json",
+              success:function(data){
+                printHtml(data);
+                $("#img_loading").hide();
+              }
+            });
+      }
+      
+      $("#buscar_park").on("click", function(){
+        buscarParking();
+      })
+      
+      printHtmlDetail = function(data){
+        
+        //console.log(data);
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+          
+          html +='<div id="group_user_parking"><b>Usuario: </b>'+data[i].user.first_name+' '+data[i].user.last_name+' <b>Telf. </b>'+data[i].user.phone+'</div>';
+          
+          html +='<p><b>Precio: </b><label class="precio">S/. '+data[i].price+'</label> Por Hora</p>';
+          html +='<p><b>Dirección: </b>'+data[i].address+'</p>';
+          html +='<p><b>Distrito: </b>'+data[i].district.name+'</p>';
+          
+          html +='<p><b>Fecha: </b>'+data[i].started_at+' Hasta '+data[i].ended_at+'</p>';
+          html +='<p><b>Hora: </b>'+data[i].started_time+' Hasta '+data[i].ended_time+'</p>';
+          
+          html +='<p><b>Tipo De Reservación: </b>'+data[i].reservation_type.name+'</p>';
+          html +='<p><b>Referencia De Como Llegar: </b>'+data[i].info+'</p>';
+          html +='<p><b>Más Detalles: </b>'+data[i].description+'</p>';
+          
+          html += '<img src="images/'+data[i].url_image+'" class="img img-responsive img_parking_det" width="" height="">';
+          html += '<br>';
+          
+          
+          html += '<form class="simple_form form-horizontal" novalidate="novalidate" id="new_place" action="reserve/new" accept-charset="UTF-8" method="get">';
+            html += '<button type="submit" class="btn btn-sm btn-success">Reservar</button>&nbsp;';
+            html += '<a onclick="atras()" class="btn btn-sm btn-default" role="button"><< Atras</a>';
+            html += '<input type="hidden" name="place_id" id="place_id" value="'+data[i].id+'">';
+          html += '</form>';
+          
+          
+        }
+        
+        $("#list_places").html(html);
+      }
+        
+      detail = function(id){
+          var data = {
+               id_place: id,
+               otro: 'otro'
+           }
+           
+           $("#title_resumen").html("Detalles Del Estacionamiento");
+           $("#img_loading").show();
+           
+           $.ajax({
+              type:"GET",
+              url:"home/detail",
+              data: data,
+              dataType:"json",
+              success:function(data){
+                printHtmlDetail(data);
+                $("#img_loading").hide();
+              }
+            });
+      }
+      
+      atras = function(){
+        buscarParking();
+      }
+      
+      $("#limpiar_park").on("click", function(){
+        $("#address").val('');
+        $("#started_at").val('');
+        $("#ended_at").val('');
+        $("#district").val('');
+      });
+    
+  })
+</script>
+
+

@@ -1,0 +1,18 @@
+<% if !user_signed_in? %>
+  <li><%= link_to "Sign Up", new_user_registration_path, :class=>'' %></li>
+  <li><%= link_to "Sign In", new_user_session_path, :class=>'' %></li>
+<% else %>
+  <li>
+    <%= link_to(destroy_user_session_path, :method => :delete, :class => '') do %>
+      <i class="fa fa-fw fa-power-off"> </i><span> Sign Out</span>
+    <% end %>
+  </li>
+  <li><%= link_to "Mis Reservas", reservations_path, :class=>'' %></li>
+  <li><%= link_to "Confirmar Reservas", confirm_reserve_index_path, :class=>'' %></li>
+  <li><%= link_to "Mis Estacionamientos", places_path, :class=>'' %></li>
+  <li><%= link_to "Mis Favoritos", favorites_path, :class=>'' %></li>
+  <li><%= link_to "Mi Perfil", edit_user_registration_path, :class=>'' %></li>
+  
+  
+  
+<% end %>

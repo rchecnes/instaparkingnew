@@ -1,0 +1,150 @@
+<%= simple_form_for @place, :html => { :class => 'form-horizontal', :multipart=> true } do |f| %>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Dirección</label>
+        <input class="form-control" type="text" name="address" id="address">
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Distrito</label>
+        <select class="form-control" type="text" name="district" id="district">
+          <option value="">Seleccionar</option>
+          <% @districts.each do |district| %>
+            <option value="<%=district.id %>"><%=district.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Tipo de Reservación</label>
+        <select class="form-control" type="text" name="reservation_type" id="reservation_type">
+          <option value="">Seleccionar</option>
+          <% @reservation_types.each do |type| %>
+            <option value="<%=type.id %>"><%=type.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+  </div>
+    
+  <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Precio(Por Hora)</label>
+        <input class="form-control" type="text" name="price" id="price">
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Fecha Desde</label>
+        <input class="form-control" type="text" name="started_at" id="started_at" data-provide='datepicker'>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Fecha Hasta</label>
+        <input class="form-control" type="text" name="ended_at" id="ended_at" data-provide='datepicker'>
+      </div>
+    </div>
+  </div>
+    
+  <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group bootstrap-timepicker timepicker">
+        <label class="control-label">Hora Desde</label>
+        <input class="form-control" type="text" name="started_time" id="started_time">
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group bootstrap-timepicker timepicker">
+        <label class="control-label">Hora Hasta</label>
+        <input class="form-control" type="text" name="ended_time" id="ended_time">
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Imagen</label>
+        <input class="form-control" type="file" name="url_image" id="url_image">
+        <!--<%= f.file_field :url_image %>-->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Referencia de como llegar</label>
+        <textarea class="form-control hresize" id="info" name="info" rows="3" cols="3"></textarea>
+      </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="form-group">
+        <label class="control-label">Más Detalles</label>
+        <textarea class="form-control hresize" id="description" name="description" rows="8" cols="3"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <input type="submit" value="Crear Parqueo" class="btn btn-md btn-success">
+      <a class="btn btn-md btn-danger" href="/places">Cancel</a>
+    </div>
+  </div>
+</div>
+<% end %>  
+
+
+<script>
+  $(document).ready(function () {
+    
+    $("#address").focus();
+    
+    $('#started_at').datepicker({
+      autoclose: true,
+      calendarWeeks: true,
+      format: 'yyyy-mm-dd',
+      orientation: "bottom auto",
+      defaultDate: new Date()
+    });
+    $('#ended_at').datepicker({
+      autoclose: true,
+      calendarWeeks: true,
+      format: 'yyyy-mm-dd',
+      orientation: "bottom auto",
+      defaultDate: new Date()
+    });
+    
+    $('#started_time').timepicker();
+    $('#ended_time').timepicker();
+    
+    $("#new_place").validate({
+      rules: {
+      "address": {required: true, },
+      "started_at": {required: true},
+      "ended_at": {required: true},
+      "started_time": {required: true},
+      "ended_time": {required: true},
+      "district": {required: true},
+      "reservation_pyte": {required: true},
+      "price": {required: true},
+      "reservation_type":{required: true},
+      "url_image":{required: true, accept:"jpg,png,jpeg,gif"}
+      
+      },
+      messages:{
+        "address": "Campo Requerido",
+        "started_at": "Campo Requerido",
+        "ended_at": "Campo Requerido",
+        "started_time": "Campo Requerido",
+        "ended_time": "Campo Requerido",
+        "district": "Campo Requerido",
+        "reservation_pyte": "Campo Requerido",
+        "price": "Campo Requerido",
+        "reservation_type":"Campo Requerido",
+        "url_image":{required:"Campo Requerido",accept:"Puede subir imagen de tipo jpg/png/jpeg/gif"}
+      }
+    });
+  });
+</script>

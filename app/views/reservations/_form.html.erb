@@ -1,0 +1,42 @@
+<%= simple_form_for @reservation, :html => { :class => 'form-horizontal' } do |f| %>
+<div class="row">
+  
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <%= f.input :started_at %>
+    <%= error_span(@reservation[:started_at]) %>
+  </div>
+  
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <%= f.input :ended_at %>
+    <%= error_span(@reservation[:ended_at]) %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <%= f.input :started_time %>
+    <%= error_span(@reservation[:started_time]) %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <%= f.input :ended_time %>
+    <%= error_span(@reservation[:ended_time]) %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <%= f.association :user %>
+    <%= error_span(@reservation[:user_id]) %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <%= f.association :place %>
+    <%= error_span(@reservation[:place_id]) %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <%= f.association :reservation_type %>
+    <%= error_span(@reservation[:reservation_type_id]) %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <%= f.input :code %>
+    <%= error_span(@reservation[:code]) %>
+  </div>
+</div>
+
+  <%= f.button :submit, :class => 'btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                reservations_path, :class => 'btn btn-default' %>
+<% end %>

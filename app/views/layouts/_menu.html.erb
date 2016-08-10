@@ -1,0 +1,18 @@
+<% if current_user %>
+    <% if current_user.role.id===1 %>
+        <li><%= link_to "Buscar Estacionamiento", root_path %></li>
+        <li><%= link_to "Publicar Estacionamiento", new_place_path %></li>
+        <li><%= link_to "Distrito", districts_path %></li>
+        <li><%= link_to "Rol", roles_path %></li>
+        <li><%= link_to "Menu", menus_path %></li>
+        <li><%= link_to "Menu Por Rol", menu_roles_path %></li>
+        <li><%= link_to "Tipo De Reservación", reservation_types_path %></li>
+    <% else %>
+        <li><%= link_to "Buscar Estacionamiento", root_path %></li>
+        <li><%= link_to "Publicar Estacionamiento", new_place_path %></li>
+    <% end %>
+<% else %>
+    <li><%= link_to "Buscar Estacionamiento", root_path %></li>
+    <li><%= link_to "Nosotros", about_index_path %></li>
+    <li><%= link_to "Nuestros Estacionamiento", ourparking_index_path %></li>
+<% end %>

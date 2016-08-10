@@ -1,0 +1,106 @@
+<%= simple_form_for @reservation, :url=>reserve_reserve_path, :html => { :class => 'form-horizontal', :id=>'form_reserve' } do |f| %>
+<div class="panel panel-success">
+      <div class="panel-heading"><h3>Destalles De La Reserva</h3></div>
+      <div class="panel-body">
+          
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label class="string optional control-label">Fecha Desde</label>
+                <input class="string optional form-control" type="text" name="started_at" id="started_at" data-provide='datepicker'>
+                <input type="hidden" name="place_id" id="place_id" value="<%=params[:place_id]%>">
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label class="string optional control-label">Fecha Hasta</label>
+                <input class="string optional form-control" type="text" name="ended_at" id="ended_at" data-provide='datepicker'>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group bootstrap-timepicker timepicker">
+                <label class="control-label">Hora Desde</label>
+                <input class="form-control input-small" type="text" name="started_time" id="started_time">
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group bootstrap-timepicker timepicker">
+                <label class="control-label">Hora Hasta</label>
+                <input class="form-control input-small" type="text" name="ended_time" id="ended_time">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label class="control-label">Typo de reservación</label>
+                <select class="form-control" type="text" name="reservation_type" id="reservation_type">
+                  <option value="">Seleccionar</option>
+                  <% @reservation_types.each do |type| %>
+                    <option value="<%=type.id %>"><%=type.name %></option>
+                  <% end %>
+                  
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                  <div class="checkbox">
+                      <label>
+                        <input type="checkbox" checked="checked" name="add_favorite" id="add_favorite"> Indicar como favorito
+                      </label>
+                    </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 pull-right">
+              <button type="submit" class="btn btn-sm btn-success">Confirmar Reserva</button>
+              <a class="btn btn-sm btn-danger" href="/">Cancelar</a>
+            </div>
+          </div>
+      </div>
+    </div>
+<% end %>
+
+    <script>
+  $(document).ready(function(){
+    $('#started_at').datepicker({
+      autoclose: true,
+      calendarWeeks: true,
+      format: 'yyyy-mm-dd',
+      orientation: "bottom auto",
+      defaultDate: new Date()
+    });
+    $('#ended_at').datepicker({
+      autoclose: true,
+      calendarWeeks: true,
+      format: 'yyyy-mm-dd',
+      orientation: "bottom auto",
+      defaultDate: new Date()
+    });
+    
+    $('#started_time').timepicker();
+    $('#ended_time').timepicker();
+    
+    //boton reservar
+    $(".group-col .btn-info").on("click", function(){
+      $(".group-col").toggle();
+      $(".detalle-park").toggle();
+    });
+    
+    $("#form_reserve").validate({
+      rules: {
+      "started_at": {required: true},
+      "ended_at": {required: true},
+      "started_time": {required: true},
+      "ended_time": {required: true},
+      "reservation_type": {required: true}
+      }
+    });
+    
+    
+  })
+</script>

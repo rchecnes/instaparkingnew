@@ -1,0 +1,53 @@
+<%- model_class = Reservation -%>
+<div class="page-header">
+  <h1>Confirmar Reservas</h1>
+</div>
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Código</th>
+      <th>Fecha Desde</th>
+      <th>Fecha Hasta</th>
+      <th>Hora Desde</th>
+      <th>Hora Hasta</th>
+      <th>Usuario</th>
+      <th>Estacionamiento</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @reservations.each do |reservation| %>
+      <tr>
+        <td><%= reservation.id %></td>
+        <td><%= reservation.code %></td>
+        <td><%= reservation.started_at %></td>
+        <td><%= reservation.ended_at %></td>
+        <td><%= reservation.started_time %></td>
+        <td><%= reservation.ended_time %></td>
+        <td><%= reservation.user.first_name %></td>
+        <td><%= image_tag reservation.place.url_image, :width=>"100", :height=>"80" %></td>
+        <td><%= reservation.state %></td>
+        <td>
+            <% if reservation.state === 'Emitido' %>
+                <%= simple_form_for @reservation, :url=>confirm_reserve_confirm_path, :html => { :class => 'form-horizontal', :id=>'form_confirm' } do |f| %>
+                    <button type="submit" class="btn btn-xs btn-success">Confirmar</button>
+                    <input type="hidden" name="reservation_id" id="reservation_id" value="<%=reservation.id%>">
+                    <input type="hidden" name="otro_id" id="otro_id" value="otro">
+                <% end %>
+            <% end %>
+            <% if reservation.state === 'Confirmado' %>   
+                <%= simple_form_for @reservation, :url=>confirm_reserve_cancel_path, :html => { :class => 'form-horizontal', :id=>'form_confirm' } do |f| %>
+                    <button type="submit" class="btn btn-xs btn-danger">Anular</button>
+                    <input type="hidden" name="reservation_id" id="reservation_id" value="<%=reservation.id%>">
+                    <input type="hidden" name="otro_id" id="otro_id" value="otro">
+                <% end %>
+            <% end %>
+        
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

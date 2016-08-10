@@ -1,0 +1,14 @@
+<%= simple_form_for @favorite, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :name %>
+  <%= error_span(@favorite[:name]) %>
+  <%= f.input :user_id %>
+  <%= error_span(@favorite[:user_id]) %>
+  <%= f.input :district_id %>
+  <%= error_span(@favorite[:district_id]) %>
+  <%= f.input :description %>
+  <%= error_span(@favorite[:description]) %>
+
+  <%= f.button :submit, :class => 'btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                favorites_path, :class => 'btn btn-default' %>
+<% end %>
